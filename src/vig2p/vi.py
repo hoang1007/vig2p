@@ -306,6 +306,8 @@ def _try_to_phonemize_subword(word: str, g2p_config: G2PConfig):
             # the dirty rule is if the subword is a single letter,
             # it only allowed to stand at the beginning of the word
             prev_subword = subword[1:]
+            if len(prev_subword) == 0:
+                raise ValueError(f"Invalid sub-word: {subword} in word {word}")
             if len(prev_subword) == 1 and start > 0:
                 raise ValueError(f"Cannot split word '{word}' into valid subwords")
 
