@@ -347,6 +347,11 @@ def _word2ipa(word: str, g2p_config: G2PConfig):
     try:
         return _convert(word=word, g2p_config=g2p_config)
     except InvalidViError:
+        # if the word is read letter by letter in English
+        # it should be read letter by letter in Vietnamese
+        if en.is_letter_by_letter(word):
+            return _phonemize_letter_by_letter(word, g2p_config)
+
         # 1. if the word is a acronym or is a english word that in CMU dictionary
         if en.isin_cmu(word):
             return en.word2ipa(
