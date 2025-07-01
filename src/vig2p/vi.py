@@ -279,6 +279,7 @@ LETTER_UPPERCASE = {
 
 
 def _try_to_phonemize_subword(word: str, g2p_config: G2PConfig):
+    word = word.lower()
     phonemized = []
 
     end = len(word)
