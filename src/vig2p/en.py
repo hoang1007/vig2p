@@ -5,6 +5,7 @@ import cmudict
 
 backend = EspeakBackend(
     language="en-us",
+    language_switch="remove-flags",
 )
 cmu_dict = cmudict.dict()
 
