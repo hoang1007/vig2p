@@ -1,12 +1,26 @@
+from warnings import warn
 from enum import Enum
 from dataclasses import dataclass
 import string
 
-from pyvinorm import ViNormalizer
-
 from vig2p import en
 from .phonemes import ViPhoneme
 from .exception import InvalidViError
+
+try:
+    from pyvinorm import ViNormalizer
+
+    normalizer = ViNormalizer(keep_punctuation=True, downcase=False).normalize
+except ImportError:
+    warn(
+        "pyvinorm is not installed, using a simple regex normalizer instead. "
+        "This may not handle all text normalization cases.",
+        ImportWarning,
+    )
+    import re
+
+    def normalizer(text: str):
+        return re.sub(r"[^\w\d\s]", lambda m: " " + m.group() + " ", text.strip())
 
 
 class Dialect(Enum):
@@ -23,7 +37,6 @@ class G2PConfig:
     cao: bool
     palatals: bool
     separator: str = "/"
-    normalized: bool = False
 
     def __post_init__(self):
         if self.pham and self.cao:
@@ -35,9 +48,6 @@ class G2PConfig:
             raise ValueError("At least one of 'pham' or 'cao' system must be enabled.")
 
         self.word_separator = self.separator + " " + self.separator
-
-        if not self.normalized:
-            self.normalizer = ViNormalizer(keep_punctuation=True, downcase=False)
 
 
 def _trans(word: str, g2p_config: G2PConfig):
@@ -386,14 +396,12 @@ def _word2ipa(word: str, g2p_config: G2PConfig):
             )
 
 
-def vig2p(text: str, separator: str = "", normalized: bool = False) -> str:
+def vig2p(text: str, separator: str = "") -> str:
     """
     Convert Vietnamese text to phonetic representation.
 
     :param text (str): Input Vietnamese text. Text must be normalized beforehand.
     :param separator (str): Separator between phonemes.
-    :param normalized (bool): Whether input text is normalized or not.
-        If `True`, the function will not apply normalization.
 
     :return str: Phonetic representation of the input text.
     """
@@ -407,11 +415,9 @@ def vig2p(text: str, separator: str = "", normalized: bool = False) -> str:
         cao=True,
         palatals=False,
         separator=separator,
-        normalized=normalized,
     )
 
-    if not g2p_config.normalized:
-        text = g2p_config.normalizer.normalize(text)
+    text = normalizer(text)
 
     words = text.split()
     phonemized = []

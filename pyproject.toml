@@ -10,12 +10,8 @@ requires-python = ">=3.10"
 dependencies = [
     "cmudict>=1.0.32",
     "phonemizer>=3.3.0",
-    "pyvinorm",
 ]
 
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
-
-[tool.uv.sources]
-pyvinorm = { git = "https://github.com/hoang1007/pyvinorm.git" }
