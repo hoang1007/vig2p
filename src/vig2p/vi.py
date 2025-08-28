@@ -6,6 +6,7 @@ import string
 from vig2p import en
 from .phonemes import ViPhoneme
 from .exception import InvalidViError
+from .utils import is_valid_word
 
 try:
     from pyvinorm import ViNormalizer
@@ -425,7 +426,7 @@ def vig2p(text: str, separator: str = "") -> str:
     for word in words:
         if word in string.punctuation:
             phonemized.append(word)
-        elif word.isalpha():
+        elif is_valid_word(word):
             phonemized.append(_word2ipa(word, g2p_config))
         else:
             raise ValueError(f"Invalid word: {word}")
