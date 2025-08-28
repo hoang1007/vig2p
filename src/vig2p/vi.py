@@ -397,12 +397,13 @@ def _word2ipa(word: str, g2p_config: G2PConfig):
             )
 
 
-def vig2p(text: str, separator: str = "") -> str:
+def vig2p(text: str, separator: str = "", skip_invalid: bool = False) -> str:
     """
     Convert Vietnamese text to phonetic representation.
 
     :param text (str): Input Vietnamese text. Text must be normalized beforehand.
     :param separator (str): Separator between phonemes.
+    :param skip_invalid (bool): If True, skip invalid words instead of raising an error. Default: False
 
     :return str: Phonetic representation of the input text.
     """
@@ -428,7 +429,7 @@ def vig2p(text: str, separator: str = "") -> str:
             phonemized.append(word)
         elif is_valid_word(word):
             phonemized.append(_word2ipa(word, g2p_config))
-        else:
+        elif not skip_invalid:
             raise ValueError(f"Invalid word: {word}")
 
     phonemized = [p for p in phonemized if p]  # Remove empty strings
