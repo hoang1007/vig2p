@@ -397,6 +397,30 @@ def _word2ipa(word: str, g2p_config: G2PConfig):
             )
 
 
+def is_vie_word(word: str) -> bool:
+    """
+    Check if a word is a valid Vietnamese word.
+
+    :param word (str): The word to check.
+
+    :return bool: True if the word is a valid Vietnamese word, False otherwise.
+    """
+    g2p_config = G2PConfig(
+        dialect=Dialect.NORTH,
+        glottal=False,
+        pham=False,
+        cao=True,
+        palatals=False,
+        separator="",
+    )
+
+    try:
+        _convert(word, g2p_config)
+        return True
+    except InvalidViError:
+        return False
+
+
 def vig2p(text: str, separator: str = "", skip_invalid: bool = False) -> str:
     """
     Convert Vietnamese text to phonetic representation.
