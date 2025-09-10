@@ -345,12 +345,8 @@ def _try_to_phonemize_subword(word: str, g2p_config: G2PConfig):
 def _phonemize_letter_by_letter(word: str, g2p_config: G2PConfig):
     letters = []
 
-    if word.isupper():
-        for c in word:
-            letters.extend(LETTER_UPPERCASE.get(c, c).split())
-    else:
-        for c in word.lower():
-            letters.extend(LETTER_LOWERCASE.get(c, c).split())
+    for c in word:
+        letters.extend(LETTER_UPPERCASE.get(c.upper(), c).split())
 
     return g2p_config.word_separator.join(
         [_convert(letter, g2p_config) for letter in letters]
