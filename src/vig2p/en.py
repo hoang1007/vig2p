@@ -30,8 +30,8 @@ def is_letter_by_letter(word: str) -> bool:
     :param word: The word to check.
     :return: True if the word is pronounced letter by letter, False otherwise.
     """
-    if not isin_cmu(word):
-        return False
+    # if not isin_cmu(word):
+    #     return False
 
     ipa = backend.phonemize(
         [word],
