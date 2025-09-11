@@ -109,12 +109,12 @@ def _trans(word: str, g2p_config: G2PConfig):
         nuc = on_glides[nuc_g]
         if ons != "kw":
             ons += "w"
-    elif nuc_g in onoff_glides:
+    elif nuc_g in onoff_glides and cod == "":
         cod = onoff_glides[nuc_g][-1]
         nuc = onoff_glides[nuc_g][:-1]
         if ons != "kw":
             ons += "w"
-    elif nuc_g in off_glides:
+    elif nuc_g in off_glides and cod == "":
         cod = off_glides[nuc_g][-1]
         nuc = off_glides[nuc_g][:-1]
     elif word in gi:
